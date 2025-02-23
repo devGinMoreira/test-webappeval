@@ -105,6 +105,7 @@
               [widgetType]="widgetType"
               (emitbgsettingOptions)="onbgsettingOptions($event)"
               (closeModalEvent)="dismissModel()"
+              #widgetBgSettingCmp
             >
             </app-widget-bg-setting>
           </div>
@@ -119,7 +120,7 @@
                   (click)="dismissModel()">
             CANCEL
           </button>
-          <button class="btn btn-primary" (click)="saveClockSettings()">
+          <button class="btn btn-primary" (click)="saveClockSettings(widgetBgSettingCmp)">
             SAVE
           </button>
         </div>

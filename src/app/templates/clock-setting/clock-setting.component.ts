@@ -31,8 +31,6 @@ export class ClockSettingComponent implements OnInit, OnChanges {
   @Input() clockWidgetObject: any;
   @Input() changeDetector: any;
   @Output() updateClockEventEmiter = new EventEmitter();
-  @ViewChild(WidgetBgSettingComponent, { static: false })
-  bgSettingComponent!: WidgetBgSettingComponent;
 
   clockEnabled: boolean;
   greetingsEnabled: boolean = false;
@@ -180,11 +178,11 @@ export class ClockSettingComponent implements OnInit, OnChanges {
     this.mapCurrentlySelectedTimezone(this.clockFormGroup.value.timeZoneId);
   }
 
-  saveClockSettings() {
-    this.bgSettingComponent.onBackgroundOptionEmit();
+  saveClockSettings(bgSettingComponent: WidgetBgSettingComponent) {
     let payload = this.clockFormGroup.value;
 
-    if(this.bgSettingComponent.areSettingsIdentical(payload, this.clockWidgetData)){
+    bgSettingComponent.onBackgroundOptionEmit();
+    if(bgSettingComponent.areSettingsIdentical(payload, this.clockWidgetData)){
       return;
     }
 
