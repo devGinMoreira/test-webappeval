@@ -127,6 +127,8 @@ export class WidgetBgSettingComponent
     "mealplan",
   ];
 
+  storedWidgetbgsetting: any ;
+
   constructor() {
     let defaultFontFamily = {
       id: 0,
@@ -184,8 +186,17 @@ export class WidgetBgSettingComponent
     }
 
     if (changes.widgetbgsetting !== undefined) {
-      if (changes.widgetbgsetting.currentValue !== undefined) {
-        this.bgSettingOptions = changes.widgetbgsetting.currentValue;
+
+      const currentValue = changes.widgetbgsetting.currentValue;
+      const previousValue = changes.widgetbgsetting.previousValue;
+     
+      if (this.areSettingsIdentical(currentValue, previousValue)) {
+        return;
+      }
+
+      if (currentValue !== undefined) {
+        this.bgSettingOptions = { ...currentValue };
+        this.storedWidgetbgsetting = { ...currentValue };
 
         if (this.bgSettingOptions.widgetname == undefined) {
           this.bgSettingOptions["widgetname"] = "";
@@ -248,6 +259,10 @@ export class WidgetBgSettingComponent
       this.bgSettingOptions.isNameVisible = false;
     }
 
+    if(this.areSettingsIdentical(this.bgSettingOptions, this.storedWidgetbgsetting)){
+      return;
+    }
+
     if (this.widgetType.toLowerCase() === "calendar") {
       this.emitbgsettingCalenderOptions.emit(this.bgSettingOptions);
     } else if (this.widgetType.toLowerCase() === "clock") {
@@ -301,4 +316,24 @@ export class WidgetBgSettingComponent
   dismissModel() {
     this.closeModalEvent.emit(true);
   }
+
+
+  // Can be create a service or utils file for this method
+  areSettingsIdentical(currentValue: any, previousValue: any): boolean { 
+    // If both values exist, compare them
+    if (currentValue && previousValue) {
+      // Check if all properties are identical
+      const areSettingsEqual = Object.keys(currentValue).every(key =>
+          currentValue[key] === previousValue[key]
+      );
+
+      // If settings are identical, return early
+      if (areSettingsEqual) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
 }

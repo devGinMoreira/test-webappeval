@@ -4,7 +4,7 @@ import {
   Input,
   OnChanges,
   Output,
-  EventEmitter,
+  EventEmitter, ViewChild,
 } from "@angular/core";
 import { WidgetService } from "src/app/service/widget.service";
 import { ToastrService } from "ngx-toastr";
@@ -17,6 +17,7 @@ import * as moment_t from "moment-timezone";
 import { Ng4LoadingSpinnerService } from "ng4-loading-spinner";
 import { ClockService } from "src/app/service/clock.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { WidgetBgSettingComponent } from '../widget-bg-setting/widget-bg-setting.component';
 
 @Component({
   selector: "app-clock-setting",
@@ -30,6 +31,8 @@ export class ClockSettingComponent implements OnInit, OnChanges {
   @Input() clockWidgetObject: any;
   @Input() changeDetector: any;
   @Output() updateClockEventEmiter = new EventEmitter();
+  @ViewChild(WidgetBgSettingComponent, { static: false })
+  bgSettingComponent!: WidgetBgSettingComponent;
 
   clockEnabled: boolean;
   greetingsEnabled: boolean = false;
@@ -178,7 +181,13 @@ export class ClockSettingComponent implements OnInit, OnChanges {
   }
 
   saveClockSettings() {
+    this.bgSettingComponent.onBackgroundOptionEmit();
     let payload = this.clockFormGroup.value;
+
+    if(this.bgSettingComponent.areSettingsIdentical(payload, this.clockWidgetData)){
+      return;
+    }
+
     payload["id"] = this.clockWidgetData.id;
     payload["widgetSetting"] = {
       id: this.clockWidgetObject.widgetSettingId,
