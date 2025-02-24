@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { LocalStorageService } from "angular-web-storage";
 import { ToastrService } from "ngx-toastr";
 import { LayoutRequest } from "../util/static-data";
@@ -7,6 +7,8 @@ import { WidgetService } from "./widget.service";
 // import * as mimeTypes from "mime-types";
 import mime from "mime";
 import { transition } from "@angular/animations";
+import { WidgetBgSettingComponent } from "../templates/widget-bg-setting/widget-bg-setting.component";
+import { WidgetsUtil } from "../util/widgetsUtil";
 
 @Injectable({
   providedIn: "root",
@@ -17,7 +19,8 @@ export class CommonFunction {
     private _widgetService: WidgetService,
     private _dataService: DataService,
     private storage: LocalStorageService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private _widgetUtil?: WidgetsUtil
   ) {}
 
   createWidgetSettingObject(
@@ -139,5 +142,13 @@ export class CommonFunction {
     } else {
       return "unknown/unknown";
     }
+  }
+
+  handleSettingComponent(widgetBgSettingComponent: WidgetBgSettingComponent, payload: any, clockWidgetData: any): boolean {
+    widgetBgSettingComponent.onBackgroundOptionEmit();
+    if (this._widgetUtil.areSettingsIdentical(payload, clockWidgetData)) {
+      return true; // Indicate that the settings are identical
+    }
+    return false; // Indicate that the settings are not identical
   }
 }

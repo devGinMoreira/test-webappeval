@@ -181,8 +181,8 @@ export class ClockSettingComponent implements OnInit, OnChanges {
   saveClockSettings(bgSettingComponent: WidgetBgSettingComponent) {
     let payload = this.clockFormGroup.value;
 
-    bgSettingComponent.onBackgroundOptionEmit();
-    if(bgSettingComponent.areSettingsIdentical(payload, this.clockWidgetData)){
+    if(this.commonFunction.handleSettingComponent(bgSettingComponent, payload, this.clockWidgetData)){
+      this.clockSettingModal.hide();
       return;
     }
 

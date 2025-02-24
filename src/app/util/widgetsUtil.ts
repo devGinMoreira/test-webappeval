@@ -233,4 +233,21 @@ export class WidgetsUtil implements OnInit {
     }
     return count;
   }
+
+
+  areSettingsIdentical(currentValue: any, previousValue: any): boolean { 
+    // If both values exist, compare them
+    if (currentValue && previousValue) {
+      // Check if all properties are identical
+      const areSettingsEqual = Object.keys(currentValue).every(key =>
+          currentValue[key] === previousValue[key]
+      );
+
+      // If settings are identical, return early
+      if (areSettingsEqual) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

@@ -12,6 +12,7 @@ import {
   SupportedFontSize,
   text_alignment,
 } from "src/app/util/static-data";
+import { WidgetsUtil } from "src/app/util/widgetsUtil";
 
 @Component({
   selector: "app-widget-bg-setting",
@@ -129,7 +130,7 @@ export class WidgetBgSettingComponent
 
   storedWidgetbgsetting: any ;
 
-  constructor() {
+  constructor(private _widgetUtil?: WidgetsUtil) {
     let defaultFontFamily = {
       id: 0,
       googleFontName: "default",
@@ -190,7 +191,7 @@ export class WidgetBgSettingComponent
       const currentValue = changes.widgetbgsetting.currentValue;
       const previousValue = changes.widgetbgsetting.previousValue;
      
-      if (this.areSettingsIdentical(currentValue, previousValue)) {
+      if (this._widgetUtil.areSettingsIdentical(currentValue, previousValue)) {
         return;
       }
 
@@ -259,7 +260,7 @@ export class WidgetBgSettingComponent
       this.bgSettingOptions.isNameVisible = false;
     }
 
-    if(this.areSettingsIdentical(this.bgSettingOptions, this.storedWidgetbgsetting)){
+    if(this._widgetUtil.areSettingsIdentical(this.bgSettingOptions, this.storedWidgetbgsetting)){
       return;
     }
 
@@ -317,23 +318,6 @@ export class WidgetBgSettingComponent
     this.closeModalEvent.emit(true);
   }
 
-
-  // Can be create a service or utils file for this method
-  areSettingsIdentical(currentValue: any, previousValue: any): boolean { 
-    // If both values exist, compare them
-    if (currentValue && previousValue) {
-      // Check if all properties are identical
-      const areSettingsEqual = Object.keys(currentValue).every(key =>
-          currentValue[key] === previousValue[key]
-      );
-
-      // If settings are identical, return early
-      if (areSettingsEqual) {
-        return true;
-      }
-    }
-    return false;
-  }
 
 
 }
